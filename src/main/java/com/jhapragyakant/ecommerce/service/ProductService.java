@@ -8,10 +8,10 @@ import java.util.UUID;
 public interface ProductService {
 
     ProductDto createProduct(ProductDto productDto);
-    ProductDto updateProduct(ProductDto productDto, UUID productId);
-    void deleteProduct(UUID productId);
+    ProductDto updateProduct(ProductDto productDto, String productId);
+    void deleteProduct(String productId);
     List<ProductDto> getAllProducts();
-    ProductDto getProduct(UUID productId);
+    ProductDto getProduct(String productId);
     Boolean doesProductExists(String name);
     String increasePrice(String productId, Double increaseAmount);
     String decreasePrice(String productId, Double decreaseAmount);

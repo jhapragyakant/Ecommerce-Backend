@@ -2,15 +2,14 @@ package com.jhapragyakant.ecommerce.service.impl;
 
 import com.jhapragyakant.ecommerce.controller.payload.ProductDto;
 import com.jhapragyakant.ecommerce.entities.Product;
+import com.jhapragyakant.ecommerce.excetion.ResourceNotFoundException;
 import com.jhapragyakant.ecommerce.repositories.ProductRepository;
 import com.jhapragyakant.ecommerce.service.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -23,19 +22,28 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
-        @Valid
+
         Product product = this.modelMapper.map(productDto, Product.class);
         Product createdProduct = this.productRepository.save(product);
         return this.modelMapper.map(createdProduct, ProductDto.class);
     }
 
     @Override
-    public ProductDto updateProduct(ProductDto productDto, UUID productId) {
-        return null;
+    public ProductDto updateProduct(ProductDto productDto, String productId) {
+        Product product = this.productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Product", "Product Id", productId));
+        product.setProductDescription(productDto.getProductDescription());
+        product.setProductName(productDto.getProductName());
+        product.setProductPrice(productDto.getProductPrice());
+        product.setProductQuantity(productDto.getProductQuantity());
+        product.setProductImageUrl(productDto.getProductImageUrl());
+
+        Product updatedProduct = this.productRepository.save(product);
+        return this.modelMapper.map(updatedProduct, ProductDto.class);
     }
 
     @Override
-    public void deleteProduct(UUID productId) {
+    public void deleteProduct(String productId) {
 
     }
 
@@ -45,13 +53,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto getProduct(UUID productId) {
+    public ProductDto getProduct(String productId) {
         return null;
     }
 
     @Override
     public Boolean doesProductExists(String name) {
-        return this.productRepository.existsByProductName(name);
+        return productRepository.existsByProductName(name);
     }
 
     @Override
@@ -73,4 +81,5 @@ public class ProductServiceImpl implements ProductService {
     public String decreaseQuantity(String productId, Integer increaseValue) {
         return null;
     }
+
 }
