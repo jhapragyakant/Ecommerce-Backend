@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -44,17 +45,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(String productId) {
-
+        Product product = this.productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Product", "Product Id", productId));
+        productRepository.delete(product);
     }
 
     @Override
     public List<ProductDto> getAllProducts() {
-        return null;
+        List<Product> products = productRepository.findAll();
+        List<ProductDto> productDtos = products.stream().map((product) -> modelMapper.map(product, ProductDto.class)).collect(Collectors.toList());
+        return productDtos;
     }
 
     @Override
     public ProductDto getProduct(String productId) {
-        return null;
+        Product product = this.productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Product", "Product Id", productId));
+        return modelMapper.map(product, ProductDto.class);
     }
 
     @Override
@@ -64,22 +71,44 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String increasePrice(String productId, Double increaseAmount) {
-        return null;
+        Product product = this.productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Product", "Product Id", productId));
+        product.setProductPrice(product.getProductPrice() + increaseAmount);
+        Product savedProduct = productRepository.save(product);
+        return String.format("Product price increased by: %.2f. Current price : %.2f", increaseAmount, savedProduct.getProductPrice());
     }
 
     @Override
     public String decreasePrice(String productId, Double decreaseAmount) {
-        return null;
+        Product product = this.productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Product", "Product Id", productId));
+        if(product.getProductPrice() - decreaseAmount < 0){
+            return String.format("Product price cannot be less than 0. Current price : %.2f", product.getProductPrice());
+        }
+        product.setProductPrice(product.getProductPrice() - decreaseAmount);
+        Product savedProduct = productRepository.save(product);
+        return  String.format("Product price decreased by: %.2f. Current price : %.2f", decreaseAmount, savedProduct.getProductPrice());
     }
 
     @Override
     public String increaseQuantity(String productId, Integer increaseValue) {
-        return null;
+        Product product = this.productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Product", "Product Id", productId));
+        product.setProductQuantity(product.getProductQuantity() + increaseValue);
+        Product savedProduct = productRepository.save(product);
+        return String.format("Product quantity increased by: %d, Current stock: %d", increaseValue, savedProduct.getProductQuantity());
     }
 
     @Override
-    public String decreaseQuantity(String productId, Integer increaseValue) {
-        return null;
+    public String decreaseQuantity(String productId, Integer decreaseValue) {
+        Product product = this.productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Product", "Product Id", productId));
+        if(product.getProductQuantity() - decreaseValue < 0){
+            return String.format("Product quantity cannot be less than 0. Current stock : %d", product.getProductQuantity());
+        }
+        product.setProductQuantity(product.getProductQuantity()-decreaseValue);
+        Product savedProduct = productRepository.save(product);
+        return String.format("Product quantity decreased by: %d. Current stock: %d", decreaseValue, savedProduct.getProductQuantity());
     }
 
 }
