@@ -1,9 +1,8 @@
 package com.jhapragyakant.ecommerce.service;
 
-import com.jhapragyakant.ecommerce.controller.payload.ProductDto;
+import com.jhapragyakant.ecommerce.payload.ProductDto;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface ProductService {
 
