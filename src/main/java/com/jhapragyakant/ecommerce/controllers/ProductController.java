@@ -1,6 +1,6 @@
 package com.jhapragyakant.ecommerce.controllers;
 
-import com.jhapragyakant.ecommerce.controller.payload.ProductDto;
+import com.jhapragyakant.ecommerce.payload.ProductDto;
 import com.jhapragyakant.ecommerce.response.ApiResponse;
 import com.jhapragyakant.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
