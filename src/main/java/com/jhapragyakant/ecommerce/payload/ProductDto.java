@@ -1,4 +1,4 @@
-package com.jhapragyakant.ecommerce.controller.payload;
+package com.jhapragyakant.ecommerce.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

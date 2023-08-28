@@ -1,6 +1,6 @@
 package com.jhapragyakant.ecommerce.service.impl;
 
-import com.jhapragyakant.ecommerce.controller.payload.ProductDto;
+import com.jhapragyakant.ecommerce.payload.ProductDto;
 import com.jhapragyakant.ecommerce.entities.Product;
 import com.jhapragyakant.ecommerce.excetion.ResourceNotFoundException;
 import com.jhapragyakant.ecommerce.repositories.ProductRepository;
