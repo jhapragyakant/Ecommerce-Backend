@@ -87,12 +87,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse updateDob(DOBDto dobDto, String userId) {
-        return null;
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new ResourceNotFoundException("User", "User Id", userId));
+        if(user.getUserDateOfBirth().compareTo(dobDto.getUserDateOfBirth()) == 0){
+            return new ApiResponse(false, "DOB same");
+        }
+        user.setUserDateOfBirth(dobDto.getUserDateOfBirth());
+        userRepository.save(user);
+        return new ApiResponse(true, "DOB updated successfully!");
     }
 
     @Override
     public ApiResponse updatePhone(PhoneDto phoneDto, String userId) {
-        return null;
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new ResourceNotFoundException("User", "User Id", userId));
+        if(user.getUserPhone().equals(phoneDto.getUserPhone())){
+            return new ApiResponse(false, "Phone no same");
+        }
+        user.setUserPhone(phoneDto.getUserPhone());
+        userRepository.save(user);
+        return new ApiResponse(true, "Phone no updated successfully!");
     }
 
 }

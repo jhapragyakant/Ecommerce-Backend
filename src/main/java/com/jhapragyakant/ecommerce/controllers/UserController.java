@@ -38,7 +38,10 @@ public class UserController {
             @PathVariable String userId
     ){
         ApiResponse response = userService.updateUserPassword(passwordDto, userId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(response.isSuccess()){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/update-user/first-name/{userId}")
@@ -47,7 +50,10 @@ public class UserController {
             @PathVariable String userId
     ){
         ApiResponse response = userService.updateUserFirstName(firstNameDto, userId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(response.isSuccess()){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/update-user/last-name/{userId}")
@@ -56,7 +62,10 @@ public class UserController {
             @PathVariable String userId
     ){
         ApiResponse response = userService.updateUserLastName(lastNameDto, userId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(response.isSuccess()){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/update-user/address/{userId}")
@@ -65,6 +74,33 @@ public class UserController {
             @PathVariable String userId
     ){
         ApiResponse response = userService.updateUserAddress(addressDto, userId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        if(response.isSuccess()){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/update-user/dob/{userId}")
+    public ResponseEntity<ApiResponse> updateDOB(
+            @Valid @RequestBody DOBDto dobDto,
+            @PathVariable String userId
+    ){
+        ApiResponse response = userService.updateDob(dobDto, userId);
+        if(response.isSuccess()){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/update-user/phone/{userId}")
+    public ResponseEntity<ApiResponse> updatePhoneNo(
+            @Valid @RequestBody PhoneDto phoneDto,
+            @PathVariable String userId
+    ){
+        ApiResponse response = userService.updatePhone(phoneDto, userId);
+        if(response.isSuccess()){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
