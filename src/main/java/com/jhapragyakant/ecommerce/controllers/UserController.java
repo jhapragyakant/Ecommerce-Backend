@@ -3,13 +3,13 @@ package com.jhapragyakant.ecommerce.controllers;
 import com.jhapragyakant.ecommerce.payload.*;
 import com.jhapragyakant.ecommerce.response.ApiResponse;
 import com.jhapragyakant.ecommerce.service.UserService;
-import org.apache.tomcat.jni.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -102,5 +102,27 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<ApiResponse> deleteUser(
+            @PathVariable String userId
+    ){
+        ApiResponse response = userService.deleteUser(userId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/get_all")
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        List<UserDto> userDtos = userService.getAllUsers();
+        return new ResponseEntity<>(userDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-user/{userId}")
+    public ResponseEntity<UserDto> getUserById(
+            @PathVariable String userId
+    ){
+        UserDto userDto = userService.getUserById(userId);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 }

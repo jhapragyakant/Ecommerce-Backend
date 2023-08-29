@@ -10,6 +10,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -107,6 +110,28 @@ public class UserServiceImpl implements UserService {
         user.setUserPhone(phoneDto.getUserPhone());
         userRepository.save(user);
         return new ApiResponse(true, "Phone no updated successfully!");
+    }
+
+    @Override
+    public ApiResponse deleteUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new ResourceNotFoundException("User", "User Id", userId));
+        this.userRepository.delete(user);
+        return new ApiResponse(true, "Deleted user!");
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = users.stream().map((user) -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+        return userDtos;
+    }
+
+    @Override
+    public UserDto getUserById(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new ResourceNotFoundException("User", "User Id", userId));
+        return modelMapper.map(user, UserDto.class);
     }
 
 }

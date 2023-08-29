@@ -3,6 +3,8 @@ package com.jhapragyakant.ecommerce.service;
 import com.jhapragyakant.ecommerce.payload.*;
 import com.jhapragyakant.ecommerce.response.ApiResponse;
 
+import java.util.List;
+
 public interface UserService {
     UserDto registerUser(UserDto userDto);
     Boolean doesUserNameExists(String username);
@@ -14,4 +16,7 @@ public interface UserService {
     ApiResponse updateUserAddress(AddressDto addressDto, String userId);
     ApiResponse updateDob(DOBDto dobDto, String userId);
     ApiResponse updatePhone(PhoneDto phoneDto, String userId);
+    ApiResponse deleteUser(String userId);
+    List<UserDto> getAllUsers();
+    UserDto getUserById(String userId);
 }
