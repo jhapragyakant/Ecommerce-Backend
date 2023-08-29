@@ -1,12 +1,22 @@
 package com.jhapragyakant.ecommerce.service;
 
-import com.jhapragyakant.ecommerce.payload.PasswordDto;
-import com.jhapragyakant.ecommerce.payload.UserDto;
+import com.jhapragyakant.ecommerce.payload.*;
+import com.jhapragyakant.ecommerce.response.ApiResponse;
+
+import java.util.List;
 
 public interface UserService {
     UserDto registerUser(UserDto userDto);
     Boolean doesUserNameExists(String username);
     Boolean doesUserEmailExists(String email);
 //    UserDto updateUser(UserDto userDto, String username);
-    String updateUserPassword(PasswordDto passwordDto, String userId);
+    ApiResponse updateUserPassword(PasswordDto passwordDto, String userId);
+    ApiResponse updateUserFirstName(FirstNameDto firstNameDto, String userId);
+    ApiResponse updateUserLastName(LastNameDto lastNameDto, String userId);
+    ApiResponse updateUserAddress(AddressDto addressDto, String userId);
+    ApiResponse updateDob(DOBDto dobDto, String userId);
+    ApiResponse updatePhone(PhoneDto phoneDto, String userId);
+    ApiResponse deleteUser(String userId);
+    List<UserDto> getAllUsers();
+    UserDto getUserById(String userId);
 }
