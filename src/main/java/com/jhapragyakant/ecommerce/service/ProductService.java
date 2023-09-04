@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    ProductDto createProduct(ProductDto productDto);
+    ProductDto createProduct(ProductDto productDto, Long categoryId);
     ProductDto updateProduct(ProductDto productDto, String productId);
     void deleteProduct(String productId);
     List<ProductDto> getAllProducts();
@@ -16,4 +16,5 @@ public interface ProductService {
     String decreasePrice(String productId, Double decreaseAmount);
     String increaseQuantity(String productId, Integer increaseValue);
     String decreaseQuantity(String productId, Integer increaseValue);
+    String changeProductCategory(String productId, Long newCategoryId);
 }

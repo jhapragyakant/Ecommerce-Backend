@@ -1,8 +1,10 @@
 package com.jhapragyakant.ecommerce.service.impl;
 
+import com.jhapragyakant.ecommerce.entities.Category;
 import com.jhapragyakant.ecommerce.payload.ProductDto;
 import com.jhapragyakant.ecommerce.entities.Product;
 import com.jhapragyakant.ecommerce.excetion.ResourceNotFoundException;
+import com.jhapragyakant.ecommerce.repositories.CategoryRepository;
 import com.jhapragyakant.ecommerce.repositories.ProductRepository;
 import com.jhapragyakant.ecommerce.service.ProductService;
 import org.modelmapper.ModelMapper;
@@ -21,10 +23,17 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
-    public ProductDto createProduct(ProductDto productDto) {
+    public ProductDto createProduct(ProductDto productDto, Long categoryId) {
+
+        Category category = this.categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Category Id", categoryId));
 
         Product product = this.modelMapper.map(productDto, Product.class);
+        product.setCategory(category);
         Product createdProduct = this.productRepository.save(product);
         return this.modelMapper.map(createdProduct, ProductDto.class);
     }
@@ -109,6 +118,20 @@ public class ProductServiceImpl implements ProductService {
         product.setProductQuantity(product.getProductQuantity()-decreaseValue);
         Product savedProduct = productRepository.save(product);
         return String.format("Product quantity decreased by: %d. Current stock: %d", decreaseValue, savedProduct.getProductQuantity());
+    }
+
+    @Override
+    public String changeProductCategory(String productId, Long newCategoryId) {
+
+        Product product = this.productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Product", "Product Id", productId));
+
+        Long oldCategoryId = product.getCategory().getCategoryId();
+        Category newCategory = this.categoryRepository.findById(newCategoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Category Id", newCategoryId));
+
+        product.setCategory(newCategory);
+        productRepository.save(product);
+        return String.format("Category id changed from %d -> %d",oldCategoryId, newCategoryId);
     }
 
 }
