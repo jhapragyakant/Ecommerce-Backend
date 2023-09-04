@@ -1,5 +1,6 @@
 package com.jhapragyakant.ecommerce.payload;
 
+import com.jhapragyakant.ecommerce.entities.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,5 +34,7 @@ public class ProductDto {
     @NotBlank(message = "Product ImageUrl cannot be empty")
     @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)", message = "file supported of type jpg, png, gif, bmp")
     private String productImageUrl;
+
+    private CategoryDto category;
 
 }
