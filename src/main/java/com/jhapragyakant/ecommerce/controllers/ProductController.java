@@ -18,14 +18,15 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/create")
+    @PostMapping("/create/category/{categoryId}")
     public ResponseEntity<?> createProduct(
-            @Valid @RequestBody ProductDto productDto
+            @Valid @RequestBody ProductDto productDto,
+            @PathVariable Long categoryId
     ){
         if(productService.doesProductExists(productDto.getProductName())){
             return new ResponseEntity<>(new ApiResponse(false, "Product exits with same name."), HttpStatus.CONFLICT);
         }
-        ProductDto createdProductDto =this.productService.createProduct(productDto);
+        ProductDto createdProductDto =this.productService.createProduct(productDto, categoryId);
         return new ResponseEntity<>(createdProductDto, HttpStatus.CREATED);
     }
 
@@ -94,5 +95,14 @@ public class ProductController {
     ){
         String responseString = productService.decreaseQuantity(productId,decreaseValue);
         return new ResponseEntity<>(responseString, HttpStatus.OK);
+    }
+
+    @PutMapping("/change-category/{productId}/{newCategoryId}")
+    public ResponseEntity<String> changeProductCategory(
+            @PathVariable String productId,
+            @PathVariable Long newCategoryId
+    ){
+        String responseMessage = productService.changeProductCategory(productId,newCategoryId);
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 }
