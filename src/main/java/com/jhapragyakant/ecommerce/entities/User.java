@@ -8,6 +8,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -24,7 +26,7 @@ public class User {
     @Column(name = "id")
     private String userId;
 
-    @Column(name = "user_name", nullable = false, length = 50)
+    @Column(name = "username", nullable = false, length = 50)
     private String username;
 
     @Column(name = "email", nullable = false, length = 50)
@@ -50,4 +52,10 @@ public class User {
 
     @Column(name = "gender",nullable = false)
     private String userGender;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 }
